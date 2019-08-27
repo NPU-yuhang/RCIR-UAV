@@ -1,0 +1,33 @@
+cam功能包中的节点主要用来实现视觉部分的相关操作，包括发布单目/双目相机节点，障碍物检测，视觉降落标识识别以及单目相机与毫米波雷达的融合程等，对应的launch文件如下：
+roslaunch cam pub_cam.launch //发布类似于莱娜这种左右摄像头共用一个id的双目相机
+roslaunch cam pub_mono_cam.launch //发布单目相机节点
+roslaunch cam pub_new_cam.launch //发布左右摄像头分别识别成两个id的双目相机,这个相机目前只在跑vins的代码中用过
+roslaunch cam vision_land_task.launch //发布单目相机并开启视觉降落标识识别功能
+roslaunch cam obstacle_detection_task.launch //发布单目相机并开启障碍物检测功能
+roslaunch cam mono_lidar_fusion.launch //发布单目相机并开启障碍物检测功能，发布毫米波雷达信息，视觉与雷达信息融合
+
+darknet_ros功能包里是开源的ROS版YOLO神经网络的算法，训练以及识别方法有相关说明，可自行百度，对应的launch文件为：
+rosluanch darknet_ros darknet_ros.launch //开启识别，等待图片消息的发布
+
+Onboard-SDK-ROS文件夹里有dji_sdk与dji_sdk_demo两个功能包
+dji_sdk功能包为大疆提供的无人机ROS通信接口，launch文件为：
+roslaunch dji_sdk sdk.launch //涉及到无人机自主飞行的任务时都要启动该launch文件
+dji_sdk_demo功能包中包含了大疆提供的一些例程以及自己写的一些算法封装和任务，其中自己写的部分在src/mission文件夹中,包含了集中式控制下多无人机编队飞行的路径规划算法(从mobile sdk中移植过来，目前并没有飞过),视觉自主降落任务，多传感器融合避障任务，势函数法路径规划算法封装，单无人机自主飞行pid控制算法封装，无人机采图像imu以及gps数据程序，获取vins所需标定素材程序等，具体可阅读相关代码
+roslaunch dji_sdk_demo avoid_obsta_from_mono_radar.launch //开启多传感器融合避障任务
+roslaunch dji_sdk_demo obstacle_avoidance.launch //开启视觉过门任务
+roslaunch vision_land.launch //开启无人机视觉自主降落任务
+采集无人机传感器数据以及相机数据等节点没写launch文件，无人机通信接口以及相机都发布的情况下可直接使用，对应：
+rosrun dji_sdk_demo caitu_new_cam //采图以及无人机传感器数据
+rosrun dji_sdk_demo kalibr_bag //采图以及imu数据，主要为联合标定相机与imu使用，关于联合标定相机与imu的代码可从github直接下载,名称为kalibr,使用方法可自行百度
+
+ros_canopen文件夹中包含了毫米波雷达can通信的相关代码，这里使用的方法是统一将can消息转化为自定义的ROS消息类型，再对其进行解算，这样做可以保证以后再加入can通信设备时能够更方便操作。can_msgs功能包中是自定义的ROS消息类型，socketcan_bridge和socketcan_interface功能包是将can消息转化为自定义ROS消息类型的程序(这两个包是github上的开源程序，因此不多解释)，conti_radar存放的是continental毫米波雷达协议解析的算法封装，my_radar功能包里存放的是将解析后的数据转化为ros消息的程序，相关launch文件如下：
+roslaunch my_radar clusters.launch //发布雷达数据，模式为cluster
+roslauncn my_radar objects.launch //发布雷达数据，模式为object
+roslaunch my_radar send_socketcan.launch //更改雷达模式
+
+rplidar_ros为激光雷达的ROS接口程序，具体用法可参考github上原作者的readme
+
+wit_imu_node为外加的维特智能的六轴陀螺仪(实际就是mpu6050的封装，所以只要是mpu6050的陀螺仪都能用)的ROS接口代码，该陀螺仪使用的是串口通信。对应的launch文件如下：
+roslaunch wit_imu_9dof wit_imu.launch //打开imu
+
+zed-ros-wrapper-2.3.x为zed相机的ROS接口程序，具体用法可参考github上原作者的readme

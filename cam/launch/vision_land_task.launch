@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <node name = "pub_mono_cam" pkg = "cam" type = "pub_mono_cam"/>
+  <node name = "vision_land2" pkg = "cam" type = "vision_land2" output="screen"/>
+</launch>
