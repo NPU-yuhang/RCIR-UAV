@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<launch>
-  <node name = "pub_left_cam" pkg = "cam" type = "pub_left_cam"/>
-  <node name = "pub_right_cam" pkg = "cam" type = "pub_right_cam"/>
-</launch>
