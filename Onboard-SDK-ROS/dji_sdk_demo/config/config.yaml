@@ -1,0 +1,33 @@
+%YAML:1.0
+
+#GPS navigation
+GPSnavigationKp: 0.2
+GPSnavigationKi: 0.03
+GPSnavigationKd: 0.2
+GPSnavigationKa: 0
+GPSnavigationKv: 0
+
+#vision navigation
+visionnavigationKp: 0.003
+visionnavigationKi: 0
+visionnavigationKd: 0.0003
+visionnavigationKa: 0
+visionnavigationKv: 0
+
+visionnavigation2Kp: 0
+visionnavigation2Ki: 0
+visionnavigation2Kd: 0
+visionnavigation2Ka: 0
+visionnavigation2Kv: 0
+
+#yaw navigation
+yawnavigationKp: 0.00001
+yawnavigationKi: 0.000005
+yawnavigationKd: 0.00001
+yawnavigationKa: 0
+yawnavigationKv: 0
+
+#velocity limit
+velolim: 1.5
+goalx: 5.0
+goaly: 15.0

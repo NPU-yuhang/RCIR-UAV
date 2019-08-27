@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <node name = "pub_mono_cam" pkg = "cam" type = "pub_mono_cam" output="screen"/>
+</launch>

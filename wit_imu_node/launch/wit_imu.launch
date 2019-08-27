@@ -1,0 +1,7 @@
+<launch>
+ <node name="wit_imu" pkg="wit_imu_9dof" type="wit_imu_node" respawn="true" output="screen" >
+	<param name="serial_port" type="String" value="/dev/ttyTHS2"/>
+ </node>
+ <node pkg="tf" type="static_transform_publisher" name="base_imu_to_base_link" args="0.15 0.0 0.0 0.0 0.0 0.0 /base_link /base_imu_link 40" />
+</launch>
+

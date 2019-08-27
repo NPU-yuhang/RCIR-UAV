@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <node name = "auto_landing_task" pkg = "dji_sdk_demo" type = "auto_landing_task" args="$(find dji_sdk_demo)/config/config.yaml" output="screen"/>
+</launch>

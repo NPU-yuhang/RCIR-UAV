@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<package format="2">.
+  <name>my_radar</name>
+  <version>0.8.0</version>
+  <description>CAN related message types.</description>
+
+  <maintainer email="mathias.luedtke@ipa.fraunhofer.de">Mathias Lüdtke</maintainer>
+  <author email="ivor@iwanders.net">Ivor Wanders</author>
+
+  <license>BSD</license>
+
+  <url type="website">http://wiki.ros.org/can_msgs</url>
+  <url type="repository">https://github.com/ros-industrial/ros_canopen</url>
+  <url type="bugtracker">https://github.com/ros-industrial/ros_canopen/issues</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>camera_info_manager</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>can_msgs</build_depend>
+  <build_depend>socketcan_interface</build_depend>
+  <build_depend>socketcan_bridge</build_depend>
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>cv_bridge</build_export_depend>
+  <build_export_depend>image_transport</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>camera_info_manager</build_export_depend>
+  <build_export_depend>message_generation</build_export_depend>
+  <build_export_depend>can_msgs</build_export_depend>
+  <build_export_depend>conti_radar</build_export_depend>
+  <build_export_depend>socketcan_interface</build_export_depend>
+  <build_export_depend>socketcan_bridge</build_export_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
+  <exec_depend>image_transport</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>camera_info_manager</exec_depend>
+  <exec_depend>message_generation</exec_depend>
+  <exec_depend>cans_msgs</exec_depend>
+  <exec_depend>conti_radar</exec_depend>
+  <exec_depend>socketcan_interface</exec_depend>
+  <exec_depend>socketcan_bridge</exec_depend>
+
+</package>

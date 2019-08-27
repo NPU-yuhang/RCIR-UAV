@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <node name = "avoid_obsta_from_mono_radar" pkg = "dji_sdk_demo" type = "avoid_obsta_from_mono_radar" args="$(find dji_sdk_demo)/config/config.yaml" output="screen"/>
+</launch>

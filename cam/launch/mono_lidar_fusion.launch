@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <node name = "pub_mono_cam" pkg = "cam" type = "pub_mono_cam"/>
+  <node name = "obstacle_detection" pkg = "cam" type = "obstacle_detection"/>
+  <node name = "socketcan_to_topic_node" pkg = "socketcan_bridge" type = "socketcan_to_topic_node"/>
+  <node name = "objects_radar_node" pkg = "my_radar" type = "objects_radar_node"/>
+  <node name = "mono_lidar_fusion" pkg = "cam" type = "mono_lidar_fusion" args="$(find cam)/config/mono_lidar.yaml" output="screen"/>
+</launch>
+

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <node name = "socketcan_to_topic_node" pkg = "socketcan_bridge" type = "socketcan_to_topic_node"/>
+  <node name = "objects_radar_node" pkg = "my_radar" type = "objects_radar_node" output="screen"/>
+</launch>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <include file="/home/nvidia/catkin_ws/src/darknet_ros/darknet_ros/launch/darknet_ros.launch">
+  </include>
+  <node name = "pub_cam_node" pkg = "cam" type = "pub_cam_node"/>
+  <node name = "stereo_camera" pkg = "cam" type = "stereo_camera"/>
+  <include file="/home/nvidia/catkin_ws/src/Onboard-SDK-ROS-3.6/dji_sdk/launch/sdk.launch">
+  </include>
+  <node name = "demo_flight_control" pkg = "dji_sdk_demo" type = "demo_flight_control"/>
+</launch>
