@@ -44,41 +44,17 @@ void FusionCallback(const sensor_msgs::ImageConstPtr &img, const my_radar::objec
   obsta_2.y = obstacle->obsta_info[1].y;
 
   int count = radar->num;
-  cv::Mat src(count,3,CV_32FC1);
-  for(int i = 0; i<count; i++)
+  cv::Mat radar_data = cv::Mat::zeros(2,count,CV_32FC1);
+  for(int i=0; i<count; i++)
   {
-    src.at<float>(i, 0) = -(radar->objs[i].Lat);
-    src.at<float>(i, 1) = h;
-    src.at<float>(i, 2) = radar->objs[i].Long;
+      radar_data.at<float>(0,i) = -(radar->objs[i].Lat);
+      radar_data.at<float>(1,i) = radar->objs[i].Long;
   }
-  //int count = scan->scan_time / scan->time_increment;
-//  for(int i = 0, j = 0; i < count; i++) {
-//      float degree = RAD2DEG(scan->angle_min + scan->angle_increment * i);
-//      if(degree > -32 && degree <32)
-//      {
-//        ROS_INFO(": [%f, %f]", degree, scan->ranges[i]);
-//        float x = scan->ranges[i] * sin(DEG2RAD(degree));
-//        float y = scan->ranges[i] * cos(DEG2RAD(degree));
-//        src.at<float>(j, 0) = x;
-//        src.at<float>(j, 1) = h;
-//        src.at<float>(j, 2) = y;
-//        j++;
-//      }
-//  }
+
+  cv::Mat point = radar2image.TransformWRadarPoint2ImagePoint(radar_data);
+  cv::Mat p_camera = radar2image.TransformWRadar2Camera(radar_data);
 
   cv::Mat img_cam = cv_bridge::toCvShare(img, "bgr8")->image;
-//  cv::Mat undistort_img;
-//  cv::undistort(img_cam, undistort_img, intrinsic, distortion_coeff);//矫正相机镜头变形
-//  cv::imshow("lalala", undistort_img);
-//  cv::imshow("lblblb", img_cam);
-  cv::Mat point = intrinsic * src.t();
-  cv::Mat scale(3, count, CV_32FC1);
-  point.row(2).copyTo(scale.row(0));
-  point.row(2).copyTo(scale.row(1));
-  point.row(2).copyTo(scale.row(2));
-  //cv::normalize(point,point,1.0,0.0,cv::NORM_INF);
-  scale = 1/scale;
-  point = point.mul(scale);
   std::vector<cv::Point> lidar_pts;
   //lidar_pts.resize(65);
 
@@ -110,24 +86,24 @@ void FusionCallback(const sensor_msgs::ImageConstPtr &img, const my_radar::objec
     lidar_pts.push_back(lidar_pt);
   }
 
-  std::string s1 = std::to_string(src.at<float>(lidar_obsta_1, 0)) + ", " +
-      std::to_string(src.at<float>(lidar_obsta_1, 1)) + ", " +
-      std::to_string(src.at<float>(lidar_obsta_1, 2));
-  std::string s2 = std::to_string(src.at<float>(lidar_obsta_2, 0)) + ", " +
-      std::to_string(src.at<float>(lidar_obsta_2, 1)) + ", " +
-      std::to_string(src.at<float>(lidar_obsta_2, 2));
+  std::string s1 = std::to_string(p_camera.at<float>(0, lidar_obsta_1)) + ", " +
+      std::to_string(p_camera.at<float>(1, lidar_obsta_1)) + ", " +
+      std::to_string(p_camera.at<float>(2, lidar_obsta_2));
+  std::string s2 = std::to_string(p_camera.at<float>(0, lidar_obsta_2)) + ", " +
+      std::to_string(p_camera.at<float>(1, lidar_obsta_2)) + ", " +
+      std::to_string(p_camera.at<float>(2, lidar_obsta_2));
   cv::putText(img_cam,s1,cv::Point(400, 300),cv::FONT_HERSHEY_SIMPLEX,0.5,cv::Scalar(255,23,0),2,4);
   cv::putText(img_cam,s2,cv::Point(0, 150),cv::FONT_HERSHEY_SIMPLEX,0.8,cv::Scalar(255,23,0),2,4);
 
   cam::point obs_point1, obs_point2;
   cam::mono_radar_fusion obs_info;
-  obs_point1.x = src.at<float>(lidar_obsta_1, 0);
-  obs_point1.y = src.at<float>(lidar_obsta_1, 1);
-  obs_point1.z = src.at<float>(lidar_obsta_1, 2);
+  obs_point1.x = p_camera.at<float>(0, lidar_obsta_1);
+  obs_point1.y = p_camera.at<float>(1, lidar_obsta_1);
+  obs_point1.z = p_camera.at<float>(2, lidar_obsta_1);
 
-  obs_point2.x = src.at<float>(lidar_obsta_2, 0);
-  obs_point2.y = src.at<float>(lidar_obsta_2, 1);
-  obs_point2.z = src.at<float>(lidar_obsta_2, 2);
+  obs_point2.x = p_camera.at<float>(0, lidar_obsta_2);
+  obs_point2.y = p_camera.at<float>(1, lidar_obsta_2);
+  obs_point2.z = p_camera.at<float>(2, lidar_obsta_2);
 
   obs_info.header.stamp = ros::Time::now();
   obs_info.points.push_back(obs_point1);
@@ -141,31 +117,12 @@ void FusionCallback(const sensor_msgs::ImageConstPtr &img, const my_radar::objec
 
 void setCameraParam(param param_camera)
 {
-  intrinsic.create(3, 3, CV_32FC1);//相机内参数
-  distortion_coeff.create(5, 1, CV_32FC1);//畸变参数
-
-  /*
-  fx 0 cx
-  0 fy cy
-  0 0  1     内参数
-  */
-  intrinsic.at<float>(0, 0) = param_camera.camera_fx;//fx
-  intrinsic.at<float>(0, 2) = param_camera.camera_cx;//cx
-  intrinsic.at<float>(1, 1) = param_camera.camera_fy;//fy
-  intrinsic.at<float>(1, 2) = param_camera.camera_cy;//cy
-
-  intrinsic.at<float>(0, 1) = 0;
-  intrinsic.at<float>(1, 0) = 0;
-  intrinsic.at<float>(2, 0) = 0;
-  intrinsic.at<float>(2, 1) = 0;
-  intrinsic.at<float>(2, 2) = 1;
-
-  /*
-  k1 k2 p1 p2 p3    畸变参数
-  */
-  distortion_coeff.at<float>(0, 0) = param_camera.camera_k1;//k1
-  distortion_coeff.at<float>(1, 0) = param_camera.camera_k2;//k2
-  distortion_coeff.at<float>(2, 0) = param_camera.camera_p1;//p1
-  distortion_coeff.at<float>(3, 0) = param_camera.camera_p2;//p2
-  distortion_coeff.at<float>(4, 0) = param_camera.camera_p3;//p3
+  camParam.fu = param_camera.camera_fx;
+  camParam.fv = param_camera.camera_fy;
+  camParam.cu = param_camera.camera_cx;
+  camParam.cv = param_camera.camera_cy;
+  camParam.pitch = 90*(CV_PI*1.0/180.0);
+  camParam.yaw = 0*(CV_PI*1.0/180.0);
+  camParam.roll = 0*(CV_PI*1.0/180.0);
+  radar2image.set_param(camParam);
 }

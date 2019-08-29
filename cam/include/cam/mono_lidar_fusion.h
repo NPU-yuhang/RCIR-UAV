@@ -23,6 +23,7 @@
 #include <cam/vision_msgs.h>
 #include <cam/point.h>
 #include <cam/mono_radar_fusion.h>
+#include "cam/waveradar2image.h"
 
 #include <my_radar/object.h>
 #include <my_radar/objects.h>
@@ -31,6 +32,9 @@
 #define DEG2RAD(x) ((x)/180*M_PI)
 float h = 0.07;
 param fusion_param = param();
+CameraParam camParam;
+waveradar2image radar2image = waveradar2image();
+
 ros::Publisher obstacle_info_pub;
 
 void FusionCallback(const sensor_msgs::ImageConstPtr &img, const my_radar::objectsConstPtr &radar, const cam::vision_msgsConstPtr &obstacle);

@@ -84,3 +84,6 @@ target_link_libraries(obstacle_detection ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
 
 add_executable(mono_lidar_fusion src/mono_lidar_fusion.cpp)
 target_link_libraries(mono_lidar_fusion ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+add_executable(calib_cam_radar src/calib_cam_radar.cpp)
+target_link_libraries(calib_cam_radar ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
